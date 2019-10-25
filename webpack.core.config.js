@@ -1,3 +1,4 @@
+const path = require('path'); //引入path
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -22,5 +23,8 @@ module.exports = {
   },
   node: {
     fs: 'empty'
+  },
+  performance: {
+    hints:false
   }
 };

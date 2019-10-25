@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="description" content="页面描述" />
+<meta name="keywords" content="关键字,关键字" />
+<meta name="robots" content="index,follow" />
+<meta name="renderer" content="webkit">
+<title></title>
+<!-- 
+<script src="./dist/table2excel.core.js"></script>  -->
+<script src="./dist/table2excel.min.js"></script>
+<style>
+@charset "utf-8";
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+ul li {
+    list-style: none;
+}
+
+.wrap-div1 {
+    padding: 5px;
+    width: 98%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.wrap-ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.layui-btn-box {
+    height: 30px;
+    width: 100px;
+    border-radius: 5px;
+    background-color: #F8F8F8;
+    color: #4A4A4A;
+    border: 1px solid #B6B6B6;
+}
+
+.layui-table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.table-thead{
+    font-size:22px;
+}
+
+table {
+    border-collapse: collapse;
+    border: solid 1px #979797;
+}
+
+table th {
+    border-collapse: collapse;
+    width:25%;
+    height: 50px;
+    background-color: #000231;
+    color: #26CBF4;
+    font-size: 14px;
+    border: 1px solid #FFFFFF;
+}
+table td {
+    border-collapse: collapse;
+    width:25%;
+    text-align: center;
+    height: 40px;
+    background-color: #FFFFFF;
+    color: #26CBF4;
+    font-size: 14px;
+    border: 1px solid #979797;
+}
+.td-bg{
+    text-align: center;
+    color: #8B572A;
+    background-color: #DDDDDD;
+}
+.td-bg1{
+    text-align: center;
+    color: #418985;
+    background-color: #CBCBCB;
+}
+.td-bg2{
+    text-align: center;
+    color: #4A4A4A;
+    background-color: #FFFFFF;
+}
+.td-bg3{
+    text-align: center;
+    font-size:18px;
+    color: #8B572A;
+    background-color: #DDDDDD;
+    
+}
+</style>
+</head>
+<body>
+    <div id="test">  
+   <button id="btn" onclick="ext()">导出excel</button>
+    </div>
+<table id="reportTable" class="layui-table">
+ <tbody>
+ <tr><td colspan="4" class="td-bg3">延误超1小时以上4小时以下航班</td></tr> <tr>
+ <td colspan="2" class="td-bg2">
+            CZ6602(2019-10-15 16:50:00-2019-10-15 18:24:00)</td>
+           <!--  <td colspan="2" class="td-bg2">
+            
+            9C8828(2019-10-15 12:15:00-2019-10-15 13:21:00)</td> -->
+            </tr>
+            <tr><td colspan="2" class="td-bg2">
+            3U8117(2019-10-15 09:20:00-2019-10-15 10:38:00)</td><td colspan="2" class="td-bg2">
+            JD5158(2019-10-15 12:45:00-2019-10-15 13:49:00)</td></tr>
+           <tr><td colspan="4" class="td-bg3">超4小时航班</td></tr> 
+            <tr><td colspan="4" class="td-bg3">取消航班</td></tr>
+             </tbody>
+             </table>
+    <script>
+
+    function ext(){
+    	var table2Excel = new Table2Excel("#reportTable");
+        table2Excel.export("日报", 'xlsx'); 
+    }
+    
+    </script>  
+
+</body>
+</html>

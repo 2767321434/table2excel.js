@@ -24,7 +24,7 @@ export default class Table2Excel {
         ? document.querySelectorAll(selector)
         : selector
       )
-
+     
     this.options = Object.assign({}, DEFAULT_OPTIONS, options)
 
     this.plugins = {}
@@ -68,24 +68,30 @@ export default class Table2Excel {
     // get total cols and rows
     const totalRows = table.rows.length
     let totalCols = 0
-
+   
     if (table.rows.length > 0) {
-      for (let i = 0; i < table.rows[0].cells.length; i++) {
-        totalCols += table.rows[0].cells[i].colSpan
-      }
-    }
-
+       for (let i = 0; i < table.rows[0].cells.length; i++) {
+        
+          totalCols += table.rows[0].cells[i].colSpan
+         
+       }
+     }
+     totalCols;
     const cells = []
     Array.from(table.rows).forEach(row => {
-      Array.from(row.cells).forEach(cell => {
-        cells.push({
-          rowRange: {},
-          colRange: {},
-          el: cell
-        })
+      const cellrow = [];
+      Array.from(row.cells).forEach(cell =>{
+        
+          cellrow.push({
+            rowRange: {},
+            colRange: {},
+            el: cell
+          })
+        
+        
       })
+      cells.push(cellrow)
     })
-
     // create matrix
     const helperMatrix = []
 
@@ -97,47 +103,65 @@ export default class Table2Excel {
       helperMatrix.push(row)
     }
 
-
     // mark matrix
-    let cursor = 0
-
+    let cursorR = 0
+    let cursorC = 0
     for (let r = 0; r < totalRows; r++) {
+      cursorC=0;
       for (let c = 0; c < totalCols; c++) {
         // skip if current matrix unit is already assigned
+       
         if (helperMatrix[r][c].cell) {
           continue
         }
-
+        var elrowSpan=1 ;
+        var elcolSpan=1;
         // assign cell to current matrix unit
-        const cell = cells[cursor++]
-        const { rowSpan, colSpan } = cell.el
-
+        var cell = cells[cursorR][cursorC]
+       if(cell==null&&cell==undefined){
+        continue
+       }
+       elrowSpan=cell.el.rowSpan;
+       elcolSpan=cell.el.colSpan;
         cell.rowRange = { from: r, to: r }
         cell.colRange = { from: c, to: c }
-
-        for (let y = r; y < r + rowSpan; y++) {
-          for (let x = c; x < c + colSpan; x++) {
-            helperMatrix[y][x].cell = cell
-            cell.colRange.to = x
-            cell.rowRange.to = y
+        
+        cursorC++;
+       
+        var maxY=(r +elrowSpan);
+        for (let y = r; y < maxY ; y++) {
+         
+          var maxX=(c +elcolSpan);
+          for (let x = c; x < maxX; x++) {
+              helperMatrix[y][x].cell = cell
+              cell.colRange.to = x
+              cell.rowRange.to = y
           }
         }
+      
       }
+      cursorR++;
     }
 
-
     // read matrix to sheet
-    cells.forEach(cell => {
-      const { rowRange, colRange, el } = cell
-      const { innerText } = el
-      const workcell = mergeCells(worksheet, colRange.from, rowRange.from, colRange.to, rowRange.to)
-      const cellStyle = getComputedStyle(el)
-
-      workcell.value = innerText
-
-      // workcellCreated
-      this._invokePlugin('workcellCreated', { workcell, cell: el, rowRange, colRange, cellStyle })
-    })
+    for(let x=0;x<cells.length;x++){
+      var row=cells[x];
+      for(let y=0;y<row.length;y++){
+        const cell=row[y];
+        const { rowRange, colRange, el } = cell
+        const { innerText } = el
+        // if(el.style.display=='none'){
+        //   continue;
+        // }
+        const workcell = mergeCells(worksheet, colRange.from, rowRange.from, colRange.to, rowRange.to)
+        const cellStyle = getComputedStyle(el)
+  
+        workcell.value = innerText
+  
+        // workcellCreated
+        this._invokePlugin('workcellCreated', { workcell, cell: el, rowRange, colRange, cellStyle })
+      }
+    }
   }
 
   export (fileName, ext) {
