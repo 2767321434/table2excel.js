@@ -1,3 +1,5 @@
+
+修改新增兼容各种不完整的畸形table
 # Table2Excel.js
 
 This is a library to export html tables to excel sheets.
